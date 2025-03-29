@@ -11,6 +11,13 @@ class PesquisaRepository implements PesquisaRepositoryInterface
         return Pesquisa::all();
     }
 
+    public function getAllByUser($id)
+    {
+        return Pesquisa::where('id_criador', $id)
+            ->select(['token_pesquisa', 'nome', 'descricao', 'url'])
+            ->get();
+    }
+
     public function find($id)
     {
         return Pesquisa::findOrFail($id);
@@ -24,7 +31,7 @@ class PesquisaRepository implements PesquisaRepositoryInterface
     public function update($id, array $data)
     {
         $pesquisa = Pesquisa::findOrFail($id);
-        
+
         return $pesquisa->update($data);
     }
 

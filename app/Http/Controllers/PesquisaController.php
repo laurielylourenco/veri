@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PesquisaResource;
 use App\Models\Pesquisa;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -20,8 +21,13 @@ class PesquisaController extends Controller
     public function index()
     {
 
+        /* Tudos que usuario pode ver seja pq ele criou ou ele participa de uma equipe validar */
 
-        return response()->json($this->pesquisa_service->all());
+        $idusuario = auth()->id();
+
+        $pesquisa = $this->pesquisa_service->getAllByUser($idusuario);
+
+        return PesquisaResource::collection($pesquisa);
     }
 
     /**

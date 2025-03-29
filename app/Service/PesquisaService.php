@@ -38,4 +38,9 @@ class PesquisaService
     {
         return $this->pesquisa_repository->find($id);
     }
+
+    public function getAllByUser(int $id): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->pesquisa_repository->getAllByUser($id);
+    }
 }
