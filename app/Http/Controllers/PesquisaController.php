@@ -13,15 +13,15 @@ class PesquisaController extends Controller
      * Display a listing of the resource.
      */
 
-     public function __construct(
+    public function __construct(
         protected PesquisaService $pesquisa_service
-    ) {
-    }
+    ) {}
 
     public function index()
     {
 
-        return $this->pesquisa_service->all();
+
+        return response()->json($this->pesquisa_service->all());
     }
 
     /**
@@ -29,26 +29,25 @@ class PesquisaController extends Controller
      */
     public function store(Request $request)
     {
-    
+
         $data = $request->validate([
             'nome' => 'required',
-            'descricao' => 'required',
-            'email' => 'required'
+            'descricao' => 'required'
         ]);
 
         $data['id_criador'] = auth()->id();
         $data['token_pesquisa'] =  Str::orderedUuid();
- 
+
         $pesquisa = $this->pesquisa_service->create($data);
 
-        if(!$pesquisa instanceof Pesquisa){
+        if (!$pesquisa instanceof Pesquisa) {
 
-             throw new \UnexpectedValueException('Falha ao criar a pesquisa');
+            throw new \UnexpectedValueException('Falha ao criar a pesquisa');
         }
 
         return response()->json([
-            'message' => 'Pesquisa criada com sucesso!', 
-        ],201); 
+            'message' => 'Pesquisa criada com sucesso!',
+        ], 201);
     }
 
     /**
@@ -57,6 +56,7 @@ class PesquisaController extends Controller
     public function show(string $id)
     {
         //
+        return response()->json($this->pesquisa_service->find($id));
     }
 
     /**
@@ -65,6 +65,13 @@ class PesquisaController extends Controller
     public function update(Request $request, string $id)
     {
         //
+
+        $data = $request->validate([
+            'nome' => 'sometimes|string|max:255',
+            'descricao' => 'nullable|string',
+        ]);
+
+        return response()->json($this->pesquisa_service->update($id, $data));
     }
 
     /**
@@ -73,5 +80,6 @@ class PesquisaController extends Controller
     public function destroy(string $id)
     {
         //
+        return response()->json(['deleted' => $this->pesquisa_service->delete($id)]);
     }
 }
