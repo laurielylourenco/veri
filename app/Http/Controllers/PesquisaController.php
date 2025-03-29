@@ -86,6 +86,6 @@ class PesquisaController extends Controller
     public function destroy(string $id)
     {
         //
-        return response()->json(['deleted' => $this->pesquisa_service->delete($id)]);
+        return response()->json(['deleted' => $this->pesquisa_service->delete($id)], 204);
     }
 }

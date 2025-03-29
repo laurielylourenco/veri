@@ -10,7 +10,7 @@ class PesquisaTest extends TestCase
 {
 
     /* Teste para criar uma pesquisa */
-    public function success_response_is_returned()
+    public function success_response_is_returned_after_create()
     {
         $this->postJson('/api/pesquisas', [
 
@@ -20,6 +20,17 @@ class PesquisaTest extends TestCase
         ])->assertExactJson([
             'message' => 'Pesquisa criada com sucesso!'
         ]);
+    }
+
+
+    public function success_response_is_returned_after_edit()
+    {
+        $response =  $this->putJson('/api/pesquisas/1', [
+            "nome" => "Pesquisa de Satisfação Teste UPDATE",
+            "descricao" => "Pesquisa para avaliar a satisfação dos clientes isso teste UPDATE."
+        ]);
+
+        $response->assertStatus(200);
     }
 
 
