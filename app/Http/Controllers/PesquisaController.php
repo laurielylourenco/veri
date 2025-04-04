@@ -48,7 +48,7 @@ class PesquisaController extends Controller
 
         if (!$pesquisa instanceof Pesquisa) {
 
-            throw new \UnexpectedValueException('Falha ao criar a pesquisa');
+            throw new \UnexpectedValueException('Falha ao criar a pergunta');
         }
 
         return response()->json([

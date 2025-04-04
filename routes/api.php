@@ -27,5 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('pesquisas', PesquisaController::class);
 
     Route::get('/pesquisas/{pesquisa}/perguntas', [PerguntaController::class, 'index']);
+   
+    Route::post('/perguntas', [PerguntaController::class, 'store']);
     
 });

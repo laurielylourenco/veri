@@ -6,7 +6,6 @@ use App\Models\Pergunta;
 use App\Models\Pesquisa;
 use App\Repositories\PerguntaRepositoryInterface;
 
-
 class PerguntaService
 {
 
@@ -17,5 +16,10 @@ class PerguntaService
     {
         return $this->pergunta_repository->all($pesquisa);
     }
-}
 
+    public function create(array $data) {
+
+
+        return $this->pergunta_repository->create($data);
+    }
+}

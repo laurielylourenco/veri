@@ -16,4 +16,9 @@ class PerguntaRepository implements PerguntaRepositoryInterface
         return $pesquisa->perguntas ?? collect();
     }
 
+    public function create(array $data)
+    {
+        return Pergunta::create($data);
+    }
+
 }

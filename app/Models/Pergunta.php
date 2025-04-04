@@ -15,6 +15,7 @@ class Pergunta extends Model
         'id_pesquisa',
         'tipo',
         'ordem',
+        'obrigatoria'
     ];
 
 
