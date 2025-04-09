@@ -20,7 +20,7 @@ class PesquisaTest extends TestCase
         parent::setUp();
 
         // Cria o usuário usando factory
-    
+
         $this->user = User::factory()->create([
             "name" => "teste",
             'email' => 'teste@email.com',
@@ -74,4 +74,37 @@ class PesquisaTest extends TestCase
         ]);
     }
 
+    /* Teste para criar uma pesquisa com erros */
+
+    public function test_user_cannot_access_protected_route_with_invalid_token()
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer token_invalido'
+        ])->postJson('/api/pesquisas', [
+            "descricao" => "Pesquisa para avaliar a satisfação dos clientes isso teste."
+
+        ]);
+
+        $response->assertStatus(401); // Unauthorized
+    }
+
+
+    public function test_error_response_is_returned()
+    {
+        $response =  $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->postJson('/api/pesquisas', [
+            "descricao" => "Pesquisa para avaliar a satisfação dos clientes isso teste."
+
+        ])->assertExactJson([
+            'message' => 'O nome é obrigatório!',
+            'errors' => [
+                'nome' => [
+                    'O nome é obrigatório!'
+                ]
+            ]
+        ]);
+
+        $response->assertStatus(422);
+    }
 }

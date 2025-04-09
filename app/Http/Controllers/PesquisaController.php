@@ -39,6 +39,9 @@ class PesquisaController extends Controller
         $data = $request->validate([
             'nome' => 'required',
             'descricao' => 'required'
+        ], [
+            'nome.required' => 'O nome é obrigatório!',
+            'descricao.required' => 'O descrição é obrigatório!',
         ]);
 
         $data['id_criador'] = auth()->id();
