@@ -18,7 +18,7 @@ return new class extends Migration
             $table->char('nome', 50)->nullable(false);
             $table->mediumText('descricao');
             $table->foreignId('id_criador')->references('id')->on('users');
-            $table->char('url', 100)->nullable();;
+            $table->char('url', 100)->nullable();
             $table->timestamps();
         });
     }

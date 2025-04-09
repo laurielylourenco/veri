@@ -17,9 +17,14 @@ class PerguntaService
         return $this->pergunta_repository->all($pesquisa);
     }
 
-    public function create(array $data) {
+    public function create(array $data)
+    {
+        $pergunta = $this->pergunta_repository->create($data);
 
+        if (!empty($data['opcoes'])) {
+            $this->pergunta_repository->addOptions($pergunta->id, $data['opcoes']);
+        }
 
-        return $this->pergunta_repository->create($data);
+        return $pergunta;
     }
 }

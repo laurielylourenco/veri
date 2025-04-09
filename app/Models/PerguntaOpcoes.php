@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PerguntaOpcoes extends Model
 {
@@ -14,4 +15,11 @@ class PerguntaOpcoes extends Model
         'id_pergunta',
         'ordem',
     ];
+
+ 
+     // Relacionamento inverso com Pergunta
+     public function pergunta(): BelongsTo
+     {
+         return $this->belongsTo(Pergunta::class, 'id_pergunta', 'id');
+     }
 }

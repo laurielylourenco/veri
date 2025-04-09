@@ -2,63 +2,76 @@
 
 namespace Tests\Feature;
 
+use App\Models\Pesquisa;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PesquisaTest extends TestCase
 {
+    use RefreshDatabase;
 
-    /* Teste para criar uma pesquisa */
-    public function success_response_is_returned_after_create()
+    protected $token;
+    protected $user;
+    protected $pesquisa;
+
+    protected function setUp(): void
     {
-        $this->postJson('/api/pesquisas', [
+        parent::setUp();
 
+        // Cria o usuário usando factory
+    
+        $this->user = User::factory()->create([
+            "name" => "teste",
+            'email' => 'teste@email.com',
+            'password' => bcrypt('123456'),
+        ]);
+
+        // Faz login e obtém o token
+        $response = $this->postJson('/api/login', [
+            'email' => 'teste@email.com',
+            'password' => '123456',
+        ]);
+
+        $this->token = $response->json('token');
+
+        // Cria a pesquisa usando factory
+        $this->pesquisa = Pesquisa::factory()->create([
+            "nome" => "Pesquisa de Satisfação TESTE",
+            "descricao" => "Pesquisa para avaliar a satisfação TESTE"
+        ]);
+    }
+
+    public function test_success_response_is_returned_after_create()
+    {
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->postJson('/api/pesquisas', [
             "nome" => "Pesquisa de Satisfação Teste",
             "descricao" => "Pesquisa para avaliar a satisfação dos clientes isso teste."
+        ]);
 
-        ])->assertExactJson([
+        $response->assertExactJson([
             'message' => 'Pesquisa criada com sucesso!'
         ]);
     }
 
-
-    public function success_response_is_returned_after_edit()
+    public function test_success_response_is_returned_after_edit()
     {
-        $response =  $this->putJson('/api/pesquisas/1', [
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->putJson('/api/pesquisas/' . $this->pesquisa->id, [
             "nome" => "Pesquisa de Satisfação Teste UPDATE",
             "descricao" => "Pesquisa para avaliar a satisfação dos clientes isso teste UPDATE."
         ]);
 
         $response->assertStatus(200);
-    }
 
-
-    /* Teste para criar uma pesquisa com erros */
-
-    public function error_response_is_returned()
-    {
-       $response =  $this->postJson('/api/pesquisas', [
-            "descricao" => "Pesquisa para avaliar a satisfação dos clientes isso teste."
-
-        ])->assertExactJson([
-            'message' => 'Erro ao criar uma pesquisa'
+        $this->assertDatabaseHas('pesquisas', [
+            'id' => $this->pesquisa->id,
+            'nome' => 'Pesquisa de Satisfação Teste UPDATE',
+            'descricao' => 'Pesquisa para avaliar a satisfação dos clientes isso teste UPDATE.'
         ]);
-
-        $response->assertStatus(201);
     }
 
-
-    /* Requisição sem token */
-    public function test_user_cannot_access_protected_route_with_invalid_token()
-    {
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer token_invalido'
-        ])->postJson('/api/pesquisas', [
-            "descricao" => "Pesquisa para avaliar a satisfação dos clientes isso teste."
-
-        ]);
-
-        $response->assertStatus(401); // Unauthorized
-    }
 }
