@@ -10,6 +10,9 @@ class PerguntaOpcoes extends Model
 {
     use HasFactory;
 
+
+    protected $table = 'opcoes';
+    
     protected $fillable = [
         'descricao',
         'id_pergunta',

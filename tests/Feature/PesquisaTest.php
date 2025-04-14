@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class PesquisaTest extends TestCase
 {
-    use RefreshDatabase;
+    //use RefreshDatabase;
 
     protected $token;
     protected $user;
@@ -20,16 +20,16 @@ class PesquisaTest extends TestCase
         parent::setUp();
 
         // Cria o usuário usando factory
-
+        $uuid  = uniqid();
         $this->user = User::factory()->create([
             "name" => "teste",
-            'email' => 'teste@email.com',
+            'email' => 'teste' . $uuid . '@email.com',
             'password' => bcrypt('123456'),
         ]);
 
         // Faz login e obtém o token
         $response = $this->postJson('/api/login', [
-            'email' => 'teste@email.com',
+            'email' => 'teste' . $uuid . '@email.com',
             'password' => '123456',
         ]);
 

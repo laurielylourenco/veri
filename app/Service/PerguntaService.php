@@ -17,14 +17,42 @@ class PerguntaService
         return $this->pergunta_repository->all($pesquisa);
     }
 
+    
+
     public function create(array $data)
     {
-        $pergunta = $this->pergunta_repository->create($data);
 
-        if (!empty($data['opcoes'])) {
-            $this->pergunta_repository->addOptions($pergunta->id, $data['opcoes']);
+        
+        // Primeiro cria a pergunta básica
+
+         $pergunta = $this->pergunta_repository->create($data);
+
+        // Verifica se é um tipo de pergunta que requer opções e se opções foram fornecidas
+        if ($this->perguntaRequerOpcoes($data['tipo']) && isset($data['opcoes'])) {   
+           $this->handleOpcoes($pergunta, $data['opcoes']);
         }
 
-        return $pergunta;
+        return $pergunta; 
+    }
+
+    protected function perguntaRequerOpcoes(string $tipo): bool
+    {
+        // Lista de tipos de perguntas que requerem opções
+        return in_array($tipo, ['multipla_escolha', 'unica_escolha', 'selecao_multipla']);
+    }
+
+    protected function handleOpcoes(Pergunta $pergunta, array $opcoes): void
+    {
+
+        if (count($opcoes) > 0) {
+
+            // Verifica se as opções têm a estrutura esperada
+            if (!isset($opcoes[0]['descricao'])) {
+                throw new \InvalidArgumentException('As opções devem conter a chave "descricao"');
+            }
+
+            // Adiciona as opções à pergunta
+            $this->pergunta_repository->addOptions($pergunta->id, $opcoes);
+        }
     }
 }

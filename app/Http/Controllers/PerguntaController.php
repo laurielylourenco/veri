@@ -29,14 +29,19 @@ class PerguntaController extends Controller
     public function store(Request $request)
     {
 
+
+        
         $data = $request->validate([
             'id_pesquisa' => 'required|integer',
             'descricao' => 'required|string',
             'tipo' => 'required|in:multipla_escolha,texto,avaliacao,data,upload,sim_nao',
             'ordem' => 'required',
-            'obrigatoria' => 'required|integer'
+            'obrigatoria' => 'required|integer',
+            'opcoes' => 'nullable|array',
+            'opcoes.*.descricao' => 'required_with:opcoes|string',
+            'opcoes.*.ordem' => 'required_with:opcoes|integer',
         ]);
-
+      
         $pergunta = $this->pergunta_service->create($data);
 
         if (!$pergunta instanceof Pergunta) {

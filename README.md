@@ -7,3 +7,5 @@ Backend: Laravel
 Frontend: React
 Banco de Dados: PostgreSQL
 Autenticação: JWT / OAuth2
+
+#Em construção 
