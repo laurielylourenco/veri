@@ -78,6 +78,34 @@ class PerguntaTest extends TestCase
                     'ordem' => 2,
                 ]
             ]
-        ]);
+        ])->assertStatus(201);
+    }
+
+
+    public function test_success_update_pergunta()
+    {
+
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+        ])->putJson("/api/perguntas/1", [
+            "id_pergunta" => 1,
+            "id_pesquisa" =>  $this->pesquisa->id,
+            "tipo" => "multipla_escolha",
+            "descricao" => "Qual melhor lanche da empresa?",
+            "ordem" => 2,
+            "obrigatoria" => 0,
+            "opcoes" => [
+                [
+                    "id" => 1,
+                    'descricao' => "Cachorro quente",
+                    'ordem' => 1,
+                ],
+                [
+                    "id" => 2,
+                    'descricao' => "Coxinha",
+                    'ordem' => 2,
+                ]
+            ]
+        ])->assertStatus(200);
     }
 }

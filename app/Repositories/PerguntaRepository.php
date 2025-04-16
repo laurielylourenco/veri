@@ -6,6 +6,7 @@ use App\Models\Pesquisa;
 use App\Models\Pergunta;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class PerguntaRepository implements PerguntaRepositoryInterface
 {
@@ -41,31 +42,40 @@ class PerguntaRepository implements PerguntaRepositoryInterface
         return $pergunta->fresh(); // Retorna a versão atualizada
     }
 
- 
+
     public function delete(int $id): bool
     {
         $pergunta = $this->model->findOrFail($id);
         return $pergunta->delete();
     }
 
- 
+
     public function addOptions(int $perguntaId, array $opcoes): Collection
     {
         $pergunta = $this->model->findOrFail($perguntaId);
         return $pergunta->opcoes()->createMany($opcoes);
     }
 
-   
-    public function syncOptions(int $perguntaId, array $opcoes): Collection
+    public function updateOptions(int $perguntaId, array $opcoes): EloquentCollection
     {
         $pergunta = $this->model->findOrFail($perguntaId);
-        
-        // Primeiro remove as opções existentes
-        $pergunta->opcoes()->delete();
-        
-        // Adiciona as novas opções
-        return $this->addOptions($perguntaId, $opcoes);
+        $updated = [];
+
+        foreach ($opcoes as $opcao) {
+            if (isset($opcao['id'])) {
+                $opcaoModel = $pergunta->opcoes()->find($opcao['id']);
+
+                if ($opcaoModel) {
+                    $dadosAtualizacao = collect($opcao)->except('id')->toArray();
+                    $opcaoModel->update($dadosAtualizacao);
+                    $updated[] = $opcaoModel;
+                }
+            }
+        }
+
+        return new EloquentCollection($updated);
     }
+
 
     /**
      * Remove opções específicas de uma pergunta
@@ -88,7 +98,7 @@ class PerguntaRepository implements PerguntaRepositoryInterface
                 ->where('id_pesquisa', $pesquisa->id)
                 ->update(['ordem' => $order + 1]); // +1 para começar de 1
         }
-        
+
         return true;
     }
 }

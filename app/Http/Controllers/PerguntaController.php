@@ -15,7 +15,7 @@ class PerguntaController extends Controller
         protected PerguntaService $pergunta_service,
         protected PesquisaService $pesquisa_service
     ) {}
-    
+
 
 
     public function index(Pesquisa $pesquisa)
@@ -30,7 +30,7 @@ class PerguntaController extends Controller
     {
 
 
-        
+
         $data = $request->validate([
             'id_pesquisa' => 'required|integer',
             'descricao' => 'required|string',
@@ -41,7 +41,7 @@ class PerguntaController extends Controller
             'opcoes.*.descricao' => 'required_with:opcoes|string',
             'opcoes.*.ordem' => 'required_with:opcoes|integer',
         ]);
-      
+
         $pergunta = $this->pergunta_service->create($data);
 
         if (!$pergunta instanceof Pergunta) {
@@ -52,5 +52,26 @@ class PerguntaController extends Controller
         return response()->json([
             'message' => 'Pergunta criada com sucesso!',
         ], 201);
+    }
+
+
+    public function update(Request $request, int $id) {
+
+        $data = $request->validate([
+            'id_pesquisa' => 'required|integer',
+            'descricao' => 'required|string',
+            'tipo' => 'required|in:multipla_escolha,texto,avaliacao,data,upload,sim_nao',
+            'ordem' => 'required',
+            'obrigatoria' => 'required|integer',
+            'opcoes' => 'nullable|array',
+            'opcoes.*.descricao' => 'required_with:opcoes|string',
+            'opcoes.*.ordem' => 'required_with:opcoes|integer',
+            'opcoes.*.id' => 'required_with:opcoes|integer',
+        ]);
+
+
+        $pergunta = $this->pergunta_service->update($id, $data);
+
+        return response()->json($pergunta);
     }
 }

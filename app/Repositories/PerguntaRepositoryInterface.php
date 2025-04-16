@@ -14,7 +14,7 @@ interface PerguntaRepositoryInterface
     public function update(int $id, array $data): Pergunta;
     public function delete(int $id): bool;
     public function addOptions(int $perguntaId, array $opcoes): Collection;
-    public function syncOptions(int $perguntaId, array $opcoes): Collection;
+    public function updateOptions(int $perguntaId, array $opcoes): Collection;
     public function removeOptions(int $perguntaId, array $opcoesIds): int;
     public function reorder(Pesquisa $pesquisa, array $newOrder): bool;
 }

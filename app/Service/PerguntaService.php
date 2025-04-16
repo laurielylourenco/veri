@@ -55,4 +55,19 @@ class PerguntaService
             $this->pergunta_repository->addOptions($pergunta->id, $opcoes);
         }
     }
+
+
+    public function update (int $id, array $data){
+
+        $pergunta = $this->pergunta_repository->update($id, $data);
+
+        // Verifica se é um tipo de pergunta que requer opções e se opções foram fornecidas
+        if ($this->perguntaRequerOpcoes($data['tipo']) && isset($data['opcoes'])) {   
+
+            $this->pergunta_repository->updateOptions($pergunta->id, $data['opcoes']);
+        }
+
+
+        return $pergunta;
+    }
 }
