@@ -22,14 +22,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         Schema::create('opcoes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pergunta')->references('id')->on('perguntas');
+            $table->foreignId('id_pergunta')->constrained('perguntas')->onDelete('cascade');
             $table->char('descricao', 255);
             $table->integer('ordem');
             $table->timestamps();
         });
+        
     }
 
     /**

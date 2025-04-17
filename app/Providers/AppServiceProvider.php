@@ -8,6 +8,7 @@ use App\Repositories\PesquisaRepository;
 use App\Repositories\PesquisaRepositoryInterface;
 use App\Service\PerguntaService;
 use App\Service\PesquisaService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,9 +16,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      * 
-     * Meu nome Lauriely, começei com dev 19 aos anos empresa software para comunicação entra cliente e empresas onde atuo em projeto chat-omichannel.
-*Entre nesse projeto para começar ele junto ao senior onde realizei atividade integração rest, webhooks junto aos redes sociais é para fazer chat funcionar melhor foi usando websockets para comunição então tenho muita experiencia nessa parte esse projeto foi grande desafio pois empresa queria entrar nesse mercado hoje ele já conta mais 40 clientes alem do uso interno da empresa, foi projeto que evolui muito.
-*Já nao sou mais junior como eu entrei
+     * 
      */
     public function register(): void
     {
@@ -35,7 +34,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PerguntaService::class, function ($app) {
             return new PerguntaService($app->make(PerguntaRepositoryInterface::class));
         });
-        
     }
 
     /**
@@ -43,6 +41,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }

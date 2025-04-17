@@ -17,22 +17,22 @@ class PerguntaService
         return $this->pergunta_repository->all($pesquisa);
     }
 
-    
+
 
     public function create(array $data)
     {
 
-        
+
         // Primeiro cria a pergunta básica
 
-         $pergunta = $this->pergunta_repository->create($data);
+        $pergunta = $this->pergunta_repository->create($data);
 
         // Verifica se é um tipo de pergunta que requer opções e se opções foram fornecidas
-        if ($this->perguntaRequerOpcoes($data['tipo']) && isset($data['opcoes'])) {   
-           $this->handleOpcoes($pergunta, $data['opcoes']);
+        if ($this->perguntaRequerOpcoes($data['tipo']) && isset($data['opcoes'])) {
+            $this->handleOpcoes($pergunta, $data['opcoes']);
         }
 
-        return $pergunta; 
+        return $pergunta;
     }
 
     protected function perguntaRequerOpcoes(string $tipo): bool
@@ -57,17 +57,23 @@ class PerguntaService
     }
 
 
-    public function update (int $id, array $data){
+    public function update(int $id, array $data)
+    {
 
         $pergunta = $this->pergunta_repository->update($id, $data);
 
         // Verifica se é um tipo de pergunta que requer opções e se opções foram fornecidas
-        if ($this->perguntaRequerOpcoes($data['tipo']) && isset($data['opcoes'])) {   
+        if ($this->perguntaRequerOpcoes($data['tipo']) && isset($data['opcoes'])) {
 
             $this->pergunta_repository->updateOptions($pergunta->id, $data['opcoes']);
         }
 
 
         return $pergunta;
+    }
+
+    public function delete(int $id): bool
+    {
+        return $this->pergunta_repository->delete($id);
     }
 }

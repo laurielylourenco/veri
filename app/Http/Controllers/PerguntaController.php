@@ -28,9 +28,6 @@ class PerguntaController extends Controller
 
     public function store(Request $request)
     {
-
-
-
         $data = $request->validate([
             'id_pesquisa' => 'required|integer',
             'descricao' => 'required|string',
@@ -55,7 +52,8 @@ class PerguntaController extends Controller
     }
 
 
-    public function update(Request $request, int $id) {
+    public function update(Request $request, int $id)
+    {
 
         $data = $request->validate([
             'id_pesquisa' => 'required|integer',
@@ -74,4 +72,16 @@ class PerguntaController extends Controller
 
         return response()->json($pergunta);
     }
+
+
+    /* DELETE */
+
+    public function delete(int $id)
+    {
+
+        return response()->json(['deleted' => $this->pergunta_service->delete($id)], 204);
+    }
+
+
+    /* Show lista */
 }

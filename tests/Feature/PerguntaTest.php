@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Pergunta;
 use App\Models\Pesquisa;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,6 +15,7 @@ class PerguntaTest extends TestCase
     protected $token;
     protected $user;
     protected $pesquisa;
+    protected $pergunta;
 
 
     protected function setUp(): void
@@ -107,5 +109,14 @@ class PerguntaTest extends TestCase
                 ]
             ]
         ])->assertStatus(200);
+    }
+
+
+    public function test_success_delete()
+    {
+
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token
+        ])->delete("/api/perguntas/6")->assertStatus(204);
     }
 }

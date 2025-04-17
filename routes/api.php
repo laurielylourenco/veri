@@ -23,12 +23,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
-
     Route::apiResource('pesquisas', PesquisaController::class);
 
+    
     Route::get('/pesquisas/{pesquisa}/perguntas', [PerguntaController::class, 'index']);
-   
     Route::post('/perguntas', [PerguntaController::class, 'store']);
     Route::put('/perguntas/{id_pergunta}', [PerguntaController::class, 'update']);
+    Route::delete('/perguntas/{id_pergunta}', [PerguntaController::class, 'delete']);
     
 });
