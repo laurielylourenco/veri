@@ -32,3 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/perguntas/{id_pergunta}', [PerguntaController::class, 'delete']);
     
 });
+
+Route::get('/teste', function () {
+    return response()->json(['msg' => 'API funcionando!']);
+});
