@@ -1,7 +1,12 @@
 # Veri - Plataforma de Feedback e Pesquisa Interna
-📌 Sobre o Projeto
-O Veri é um sistema web que permite a coleta e análise de feedbacks de funcionários e clientes, ajudando empresas a melhorar seus processos, cultura organizacional e satisfação do cliente.
 
+
+## 📌 Sobre o Projeto
+
+ O Veri é um sistema web que permite a coleta e análise de feedbacks de funcionários e clientes, ajudando empresas a melhorar seus processos, cultura organizacional e satisfação do cliente.
+
+
+![Imagem Screenshot](veri-frontend/public/image.png)
 ## 🛠️ Tecnologias Utilizadas
 
 - **Laravel** — Framework PHP para o back-end
