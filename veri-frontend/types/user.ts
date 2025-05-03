@@ -12,3 +12,8 @@ export interface sign_up {
   email: string
   password: string
 }
+
+export interface login_api {
+  email: string
+  password: string
+}

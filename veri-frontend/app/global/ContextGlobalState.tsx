@@ -1,22 +1,42 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useMemo, useEffect } from 'react';
 import { User } from '@/types/user';
 import { GlobalState } from '@/types/global';
-
-
 
 const GlobalStateContext = createContext<GlobalState | undefined>(undefined);
 
 export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
-  const [userOnline, setUserOnline] = useState<User | null>(null);
+  const [userOnline, setUserOnlineState] = useState<User | null>(null);
+
+  // Função para persistir o usuário
+  const setUserOnline = (user: User | null) => {
+    setUserOnlineState(user);
+    if (user) {
+      localStorage.setItem('userOnline', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('userOnline');
+    }
+  };
+
+  // Carregar do localStorage no início
+  useEffect(() => {
+    const storedUser = localStorage.getItem('userOnline');
+    if (storedUser) {
+      try {
+        setUserOnlineState(JSON.parse(storedUser));
+      } catch {
+        setUserOnlineState(null);
+      }
+    }
+  }, []);
 
   const isAutenticado = () => !!userOnline;
 
   const value = useMemo(() => ({
     userOnline,
     setUserOnline,
-    isAutenticado
+    isAutenticado,
   }), [userOnline]);
 
   return (

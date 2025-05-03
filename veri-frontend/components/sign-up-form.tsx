@@ -1,44 +1,60 @@
 "use client"
 
-import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useSignUp } from "@/service/query/authentication"
-import { sign_up } from "@/types/user"
+import { sign_up, User } from "@/types/user"
+import { toast } from "sonner"
+import { useGlobalState } from "@/app/global/ContextGlobalState"
+import { useEffect } from "react"
+import { useRouter } from 'next/navigation'
+
 
 export function SignUpForm() {
+
+  const { userOnline, setUserOnline } = useGlobalState()
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<sign_up>()
 
-  const { mutateAsync: mutateSignUp } = useSignUp();
+  const { mutateAsync: mutateSignUp } = useSignUp()
+  const router = useRouter()
 
+  useEffect(() => {
+
+    if (userOnline) {
+      //window.location.href = "/building"
+      router.push("/building")
+    }
+  }, [userOnline])
 
   async function onSubmit(data: sign_up) {
-    console.log(data)
-
-
     mutateSignUp(data)
-      .then((result) => {
-        console.log('result', result);
-        window.location.href = "/dashboard"
+      .then((rtn) => {
+
+
+        const user: User = {
+          id: rtn.user.id,
+          token: rtn.token,
+          name: rtn.user.name,
+          email: rtn.user.email
+        }
+      
+        setUserOnline(user);
       })
       .catch((error) => {
-        // Verifica se é um erro do Axios com resposta
-        if (error.response && error.response.data && error.response.data.message) {
-          alert(error.response.data.message);
-        } else if (error.message) {
-          alert(error.message); // erro padrão do JS
-        } else {
-          alert("Erro desconhecido");
-        }
+        const errorMessage =
+          error?.response?.data?.message ||
+          error?.message ||
+          "Erro desconhecido"
 
+        toast.error(errorMessage)
 
-      });
+      })
   }
 
   return (

@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { GlobalStateProvider } from './global/ContextGlobalState'
 import { ReactQueryProvider } from './global/ReactQueryProvider'
-
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: 'Veri',
@@ -25,6 +25,8 @@ export default function RootLayout({
             {children}
           </GlobalStateProvider>
         </ReactQueryProvider>
+        <Toaster richColors position="top-center" />
+
       </body>
     </html>
   )
